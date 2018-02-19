@@ -3,6 +3,7 @@ package ado.com.testarchcomponents;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
+import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
@@ -16,16 +17,14 @@ import android.util.Log;
 public class LocationListener implements LifecycleObserver {
     private static final String TAG = "LocationListener";
 
-    private final Context mContext;
+    private final Context mApplicationContext;
     private final MyLocationListener mMyLocationListener;
+    private final LocationViewModel mModel;
 
-    LocationListener(final Context context) {
-        mContext = context;
+    LocationListener(final Context applicationContext, LocationViewModel viewModel) {
+        mApplicationContext = applicationContext;
         mMyLocationListener = new MyLocationListener();
-    }
-
-    public void init() {
-
+        mModel = viewModel;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -41,7 +40,7 @@ public class LocationListener implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     void start() {
-        LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             //TODO check permissions
             try {
@@ -52,13 +51,13 @@ public class LocationListener implements LifecycleObserver {
         }
     }
 
-
     private class MyLocationListener implements android.location.LocationListener {
 
         @Override
         public void onLocationChanged(Location location) {
             Log.d(TAG, "onLocationChanged() " + location);
-
+            mModel.locationLiveData.setValue(
+                    new ado.com.testarchcomponents.Location(location.getLatitude(), location.getLongitude()));
         }
 
         @Override
@@ -79,7 +78,7 @@ public class LocationListener implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     void stop() {
-        LocationManager locationManager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             locationManager.removeUpdates(mMyLocationListener);
         }
