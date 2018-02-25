@@ -22,22 +22,22 @@ public class LocationViewModel extends AndroidViewModel {
 
 
     private class LocationLiveData extends LiveData<GpsLocation> {
-        private final LocationManager mListener2;
+        private final LocationManager mLocationManager;
 
         private GpsLocationListener mGpsLocationListener = this::setValue;
 
-        private LocationLiveData(final LocationManager listener) {
-            mListener2 = listener;
+        private LocationLiveData(final LocationManager locationManager) {
+            mLocationManager = locationManager;
         }
 
         @Override
         protected void onActive() {
-            mListener2.start(mGpsLocationListener);
+            mLocationManager.start(mGpsLocationListener);
         }
 
         @Override
         protected void onInactive() {
-            mListener2.stop();
+            mLocationManager.stop();
         }
     }
 }
