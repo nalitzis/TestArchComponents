@@ -13,31 +13,30 @@ public class LocationViewModel extends AndroidViewModel {
 
     public LocationViewModel(@NonNull Application application) {
         super(application);
-        mLocationLiveData = new LocationLiveData(new LocationManager(application));
+        mLocationLiveData = new LocationLiveData(new GpsLocationManager(application));
     }
 
     public LiveData<GpsLocation> getLocationLiveData() {
         return mLocationLiveData;
     }
 
-
     private class LocationLiveData extends LiveData<GpsLocation> {
-        private final LocationManager mLocationManager;
+        private final GpsLocationManager mGpsLocationManager;
 
         private GpsLocationListener mGpsLocationListener = this::setValue;
 
-        private LocationLiveData(final LocationManager locationManager) {
-            mLocationManager = locationManager;
+        private LocationLiveData(final GpsLocationManager gpsLocationManager) {
+            mGpsLocationManager = gpsLocationManager;
         }
 
         @Override
         protected void onActive() {
-            mLocationManager.start(mGpsLocationListener);
+            mGpsLocationManager.start(mGpsLocationListener);
         }
 
         @Override
         protected void onInactive() {
-            mLocationManager.stop();
+            mGpsLocationManager.stop();
         }
     }
 }

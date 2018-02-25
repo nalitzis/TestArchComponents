@@ -8,23 +8,23 @@ import android.util.Log;
 
 import ado.com.testarchcomponents.model.GpsLocation;
 
-public class LocationManager implements LocationListener, LifecycleObserver {
-    private static final String TAG = "LocationManager";
+public class GpsLocationManager implements LocationListener, LifecycleObserver {
+    private static final String TAG = "GpsLocationManager";
     private Context mApplicationContext;
 
     private GpsLocationListener gpsLocationListener;
 
-    LocationManager(final Context applicationContext) {
+    GpsLocationManager(final Context applicationContext) {
         mApplicationContext = applicationContext;
     }
 
     void start(final GpsLocationListener listener) {
         gpsLocationListener = listener;
-        android.location.LocationManager locationManager = (android.location.LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager locationManager = (LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             //TODO check permissions
             try {
-                locationManager.requestLocationUpdates(android.location.LocationManager.GPS_PROVIDER, 0, 0, this);
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
             } catch (SecurityException e) {
                 Log.e(TAG, "no permission given for GPS updates!");
             }
@@ -32,7 +32,7 @@ public class LocationManager implements LocationListener, LifecycleObserver {
     }
 
     void stop() {
-        android.location.LocationManager locationManager = (android.location.LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager locationManager = (LocationManager) mApplicationContext.getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
             locationManager.removeUpdates(this);
         }
