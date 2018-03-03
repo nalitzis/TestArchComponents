@@ -23,14 +23,9 @@ class StartActivity : AppCompatActivity(), Observer<GpsLocation> {
         mViewModel?.locationLiveData?.observe(this, this)
     }
 
-    public override fun onDestroy() {
-        super.onDestroy()
-        mViewModel?.locationLiveData?.removeObserver(this)
-    }
-
     override fun onChanged(location: GpsLocation?) {
         if (location != null) {
-            mBinding?.included?.setLocation(location)
+            mBinding?.included?.location = location
         }
     }
 }
