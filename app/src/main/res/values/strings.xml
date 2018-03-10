@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">TestArchComponents</string>
     <string name="action_settings">Settings</string>
+    <string name="latitude_text">Current latitude</string>
+    <string name="longitude_text">Current longitude</string>
 </resources>

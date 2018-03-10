@@ -17,8 +17,6 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
     private class LocationLiveData
     constructor(private val mGpsLocationManager: GpsLocationManager) : LiveData<GpsLocation>() {
 
-        //private val mGpsLocationListener = GpsLocationListener { this.value = it }
-
         private val mGpsLocationListener = object : GpsLocationListener {
             override fun onLocationChange(location: GpsLocation) { value = location }
         }

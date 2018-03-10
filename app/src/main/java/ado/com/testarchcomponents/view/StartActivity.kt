@@ -18,9 +18,19 @@ class StartActivity : AppCompatActivity(), Observer<GpsLocation> {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setupList()
         mViewModel = ViewModelProviders.of(this).get(LocationViewModel::class.java)
         //instead of pushing data to the UI, let the UI observe changes to it.
         mViewModel?.locationLiveData?.observe(this, this)
+    }
+
+    private fun setupList() {
+        mBinding?.included?.coordinatesList?.adapter = CoordinatesAdapter()
+        subscribeToListChanges()
+    }
+
+    private fun subscribeToListChanges() {
+        //TODO subscribe for changes to the list. use a view-model which will observe the db. (try use room)
     }
 
     override fun onChanged(location: GpsLocation?) {
